@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  pythonapp:
+    container_name: pythonapp
+    image: pythonapp
+    build: .
+    ports:
+      - "80:80"
+    env_file:
+      - web-variables.env
+    depends_on:
+      - db
+  
+  db:
+    container_name: db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    env_file: 
+      - db-variables.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+volumes:
+  pgdata: 
